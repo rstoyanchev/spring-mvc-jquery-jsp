@@ -1,19 +1,16 @@
 
-<jsp:include page="../common/header.jsp" />
-
 <div>
-	<jsp:include page="searchContent.jsp"/>
+	<jsp:include page="search.jsp"/>
 </div>
 <div>
 	<div class="span-16 colborder">
-		<jsp:include page="listContent.jsp"/>
+		<jsp:include page="list.jsp"/>
 	</div>
 	<div class="span-7 last">
-		<jsp:include page="showContent.jsp"/>
+		<jsp:include page="show.jsp"/>
 	</div>
 </div>
 
-<jsp:include page="../common/footer.jsp" />
 
 <script type="text/javascript">
 	$(document).ready(function() {
