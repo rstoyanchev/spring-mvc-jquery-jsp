@@ -18,15 +18,24 @@
 	
 	<!-- Configures a handler for serving static resources by forwarding to the Servlet container's default Servlet. -->
 	<default-servlet-handler />
-
-	<interceptors>
-		<beans:bean class="org.springframework.samples.travel.HtmlFormatHandlerInterceptor"/>
-	</interceptors>
 	
-	<!-- Maps view names to JSP pages -->
-	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- Maps view names to JSP pages automatically decorated with template-->
+	<!-- With HTTP parameter "htmlFormat=nolayout" no decoration is performed (default is "ajax=true") -->
+	<!-- 
+	Note by: jorge.simao@glintt.com, jsimao71@gmail.com, jsimao@jpalace.org, admin@helloapp.org
+	Possible future alternative packagings if/when JspTemplateViewResolver is added/released with Spring 3.2:
+	 org.springframework.web.servlet.view.JspTemplateViewResolver (along side with parent class InternalResourceViewResolver)
+	 org.springframework.ext.web.servlet.view.JspTemplateViewResolver (extension/experimental status)
+	 org.springframework.rd.web.servlet.view.JspTemplateViewResolver (R&D status)
+	 org.springsource.research.web.servlet.view.JspTemplateViewResolver (yet another R&D status)
+	 -->
+
+	<beans:bean id="viewResolver" class="org.helloapp.spring.web.view.jsp.JspTemplateViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/"/>
 		<beans:property name="suffix" value=".jsp"/>
+		<beans:property name="templateName" value="common/standard"/>
+		<beans:property name="layoutParam" value="htmlFormat"/>
+		<beans:property name="layoutParamValue" value="nolayout"/>
 	</beans:bean>
 
 	<!-- Configures transaction management around @Transactional components -->
