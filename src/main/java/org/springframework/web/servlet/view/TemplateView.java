@@ -1,4 +1,4 @@
-package org.helloapp.spring.web.view.jsp;
+package org.springframework.web.servlet.view;
 
 public interface TemplateView {
 	void setTemplatePath(String templateName);

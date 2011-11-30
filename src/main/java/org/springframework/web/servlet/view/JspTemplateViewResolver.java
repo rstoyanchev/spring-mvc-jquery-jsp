@@ -1,7 +1,6 @@
-package org.helloapp.spring.web.view.jsp;
+package org.springframework.web.servlet.view;
 
 import org.springframework.util.ClassUtils;
-import org.springframework.web.servlet.view.*;
 
 public class JspTemplateViewResolver extends InternalResourceViewResolver {
 	private static final boolean jstlPresent = ClassUtils.isPresent(

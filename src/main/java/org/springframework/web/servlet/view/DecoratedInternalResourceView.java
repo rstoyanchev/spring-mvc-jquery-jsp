@@ -1,21 +1,22 @@
-package org.helloapp.spring.web.view.jsp;
+package org.springframework.web.servlet.view;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.InternalResourceView;
 
-public class DecoratedJstlView extends JstlView  implements TemplateView {
+public class DecoratedInternalResourceView extends InternalResourceView implements TemplateView {
 	protected String templatePath;
 	protected String title;
 	protected String layoutParam = JspTemplateViewResolver.LAYOUT_PARAM;
 	protected String layoutParamValue = JspTemplateViewResolver.LAYOUT_PARAM_VALUE;
 	
-	public DecoratedJstlView() {
-	}
 	
+	public DecoratedInternalResourceView() {
+	}
+
 	public String getTemplatePath() {
 		return templatePath;
 	}
@@ -32,7 +33,6 @@ public class DecoratedJstlView extends JstlView  implements TemplateView {
 		this.title = title;
 	}
 
-	
 	public String getLayoutParam() {
 		return layoutParam;
 	}
@@ -48,7 +48,7 @@ public class DecoratedJstlView extends JstlView  implements TemplateView {
 	public void setLayoutParamValue(String layoutParamValue) {
 		this.layoutParamValue = layoutParamValue;
 	}
-
+	
 	@Override
 	protected void renderMergedOutputModel(
 			Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -59,7 +59,7 @@ public class DecoratedJstlView extends JstlView  implements TemplateView {
 		}
 		super.renderMergedOutputModel(model, request, response);
 	}
-
+	
 	@Override
 	protected String prepareForRendering(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -71,7 +71,9 @@ public class DecoratedJstlView extends JstlView  implements TemplateView {
 	}
 	
 	protected boolean useTemplate(HttpServletRequest request) {
-		System.out.println(this + ".useTemplate:" + layoutParam + "=" + layoutParamValue + " =?" + request.getParameter(layoutParam));
-		return layoutParamValue==null || !layoutParamValue.equals(request.getParameter(layoutParam));
+		return layoutParamValue==null || layoutParamValue.equals(request.getParameter(layoutParam));
 	}
+	
+	
 }
+

@@ -30,7 +30,7 @@
 	 org.springsource.research.web.servlet.view.JspTemplateViewResolver (yet another R&D status)
 	 -->
 
-	<beans:bean id="viewResolver" class="org.helloapp.spring.web.view.jsp.JspTemplateViewResolver">
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.JspTemplateViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/"/>
 		<beans:property name="suffix" value=".jsp"/>
 		<beans:property name="templateName" value="common/standard"/>

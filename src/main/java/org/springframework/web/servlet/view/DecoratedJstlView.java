@@ -1,30 +1,29 @@
-package org.helloapp.spring.web.view.jsp;
+package org.springframework.web.servlet.view;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.JstlView;
 
-public class DecoratedInternalResourceView extends InternalResourceView implements TemplateView {
+public class DecoratedJstlView extends JstlView implements TemplateView {
 	protected String templatePath;
 	protected String title;
 	protected String layoutParam = JspTemplateViewResolver.LAYOUT_PARAM;
 	protected String layoutParamValue = JspTemplateViewResolver.LAYOUT_PARAM_VALUE;
-	
-	
-	public DecoratedInternalResourceView() {
+
+	public DecoratedJstlView() {
 	}
 
 	public String getTemplatePath() {
 		return templatePath;
 	}
-	
+
 	public void setTemplatePath(String templatePath) {
 		this.templatePath = templatePath;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -48,10 +47,10 @@ public class DecoratedInternalResourceView extends InternalResourceView implemen
 	public void setLayoutParamValue(String layoutParamValue) {
 		this.layoutParamValue = layoutParamValue;
 	}
-	
+
 	@Override
-	protected void renderMergedOutputModel(
-			Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		if (useTemplate(request)) {
 			model.put("main", getUrl());
 			model.put("title", title);
@@ -59,21 +58,20 @@ public class DecoratedInternalResourceView extends InternalResourceView implemen
 		}
 		super.renderMergedOutputModel(model, request, response);
 	}
-	
+
 	@Override
-	protected String prepareForRendering(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	protected String prepareForRendering(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if (useTemplate(request)) {
 			return templatePath;
-		} else {
+		}
+		else {
 			return super.prepareForRendering(request, response);
 		}
 	}
-	
-	protected boolean useTemplate(HttpServletRequest request) {
-		return layoutParamValue==null || layoutParamValue.equals(request.getParameter(layoutParam));
-	}
-	
-	
-}
 
+	protected boolean useTemplate(HttpServletRequest request) {
+		System.out.println(this + ".useTemplate:" + layoutParam + "=" + layoutParamValue + " =?"
+				+ request.getParameter(layoutParam));
+		return layoutParamValue == null || !layoutParamValue.equals(request.getParameter(layoutParam));
+	}
+}
