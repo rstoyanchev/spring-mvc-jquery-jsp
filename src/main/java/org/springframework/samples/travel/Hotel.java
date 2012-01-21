@@ -11,6 +11,7 @@ import javax.persistence.Id;
 /**
  * A hotel where users may book stays.
  */
+@SuppressWarnings("serial")
 @Entity
 public class Hotel implements Serializable {
 	

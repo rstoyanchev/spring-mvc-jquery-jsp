@@ -76,6 +76,7 @@ public class JpaBookingService implements BookingService {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private User findUser(String username) {
 		return (User) em.createQuery(
 				"select u from User u where u.username = :username")

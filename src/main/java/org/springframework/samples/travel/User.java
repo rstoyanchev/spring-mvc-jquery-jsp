@@ -9,6 +9,7 @@ import javax.persistence.Table;
 /**
  * A user who can book hotels.
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "Customer")
 public class User implements Serializable {

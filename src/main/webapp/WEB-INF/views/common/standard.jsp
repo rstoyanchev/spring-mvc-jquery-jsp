@@ -3,6 +3,6 @@
     
 <jsp:include page="header.jsp" /> 
 
-<jsp:include page="${main}" />
+<jsp:include page="${viewUrl}" />
 
 <jsp:include page="footer.jsp" />

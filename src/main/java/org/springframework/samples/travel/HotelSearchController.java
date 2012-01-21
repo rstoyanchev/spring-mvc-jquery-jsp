@@ -31,7 +31,7 @@ public class HotelSearchController {
 	public String list(SearchCriteria criteria, Model model) {
 		List<Hotel> hotels = bookingService.findHotels(criteria);
 		model.addAttribute(hotels);
-		return "hotels/list";
+		return "common/standard+hotels/list";
 	}
 
 }
