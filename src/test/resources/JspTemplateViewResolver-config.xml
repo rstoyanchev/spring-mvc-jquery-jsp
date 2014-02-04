@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.JspTemplateViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+		<property name="layoutParam" value="htmlFormat"/>
+		<property name="cancelLayoutParamValue" value="nolayout"/>
+		<property name="templateNameMap">
+			<map>
+				<entry key="hotels/main" value="common/standard"/>	
+				<entry key="hotels/.+" value="common/standard-alt"/>
+			</map>
+		</property>
+		<property name="usePatterns" value="true" />
+		<property name="dynamicTemplates" value="true" />	
+		<property name="defaultTemplateName" value="common/standard"/>
+	</bean>
+
+
+</beans>

@@ -3,8 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 		
@@ -19,23 +18,25 @@
 	<!-- Configures a handler for serving static resources by forwarding to the Servlet container's default Servlet. -->
 	<default-servlet-handler />
 	
-	<!-- Maps view names to JSP pages automatically decorated with template-->
-	<!-- With HTTP parameter "htmlFormat=nolayout" no decoration is performed (default is "ajax=true") -->
-	<!-- 
-	Note by: jorge.simao@glintt.com, jsimao71@gmail.com, jsimao@jpalace.org, admin@helloapp.org
-	Possible future alternative packagings if/when JspTemplateViewResolver is added/released with Spring 3.2:
-	 org.springframework.web.servlet.view.JspTemplateViewResolver (along side with parent class InternalResourceViewResolver)
-	 org.springframework.ext.web.servlet.view.JspTemplateViewResolver (extension/experimental status)
-	 org.springframework.rd.web.servlet.view.JspTemplateViewResolver (R&D status)
-	 org.springsource.research.web.servlet.view.JspTemplateViewResolver (yet another R&D status)
-	 -->
-
+	<!-- Maps view names to JSP pages automatically decorated with a template view-->
+	<!-- For requests with HTTP parameter "htmlFormat=nolayout" no decoration is performed (default is "layout=none") -->
+	<!-- Property templateNameMap is configured mostly for demonstration purposes (since template "common/standard-alt" is almost identical to "common/standard") -->
+	<!-- Setting property dynamicTemplates=true allow templates to be selected dynamically, by setting HTTP parameter htmlFormat='templateName' -->
+	<!-- Note: Because partial view rendering is being used, Javascript needs to be disabled to see the alternative template) -->
 	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.JspTemplateViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/"/>
 		<beans:property name="suffix" value=".jsp"/>
-		<beans:property name="templateName" value="common/standard"/>
 		<beans:property name="layoutParam" value="htmlFormat"/>
-		<beans:property name="layoutParamValue" value="nolayout"/>
+		<beans:property name="cancelLayoutParamValue" value="nolayout"/>
+		<beans:property name="templateNameMap">
+			<beans:map>
+				<beans:entry key="hotels/main" value="common/standard"/>	
+				<beans:entry key="hotels/.+" value="common/standard-alt"/>
+			</beans:map>			
+		</beans:property>
+		<beans:property name="usePatterns" value="true" />
+		<beans:property name="dynamicTemplates" value="true" />	
+		<beans:property name="defaultTemplateName" value="common/standard"/>
 	</beans:bean>
 
 	<!-- Configures transaction management around @Transactional components -->

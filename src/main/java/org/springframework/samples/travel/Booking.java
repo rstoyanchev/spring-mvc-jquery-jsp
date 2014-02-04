@@ -22,9 +22,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * A Hotel Booking made by a User.
  */
+@SuppressWarnings("serial")
 @Entity
 public class Booking implements Serializable {
 	
+
 	private Long id;
 
 	private User user;
@@ -192,6 +194,7 @@ public class Booking implements Serializable {
 		this.amenities = amenities;
 	}
 
+	@SuppressWarnings("unused")
 	private Date today() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_MONTH, -1);

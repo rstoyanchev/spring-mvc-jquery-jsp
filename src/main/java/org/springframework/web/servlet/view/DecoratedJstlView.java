@@ -1,77 +1,83 @@
 package org.springframework.web.servlet.view;
 
-import java.util.Map;
-
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.MessageSource;
+import org.springframework.web.servlet.support.JstlUtils;
+import org.springframework.web.servlet.support.RequestContext;
 import org.springframework.web.servlet.view.JstlView;
 
-public class DecoratedJstlView extends JstlView implements TemplateView {
-	protected String templatePath;
-	protected String title;
-	protected String layoutParam = JspTemplateViewResolver.LAYOUT_PARAM;
-	protected String layoutParamValue = JspTemplateViewResolver.LAYOUT_PARAM_VALUE;
+/**
+ * Specialization of {@link DecoratedInternalResourceView} for JSTL pages,
+ * i.e. JSP pages that use the JSP Standard Tag Library.
+ *
+ * Implementation based on {@link JstlView}, except that {@link DecoratedInternalResourceView} is
+ * used as parent class in stead of {@link InternalResourceView}.
+ * 
+ * @author Jorge Sim&atilde;o (adaptation)
+ * @author Juergen Hoeller (implemented {@link JstlView})
+ * @since 22.11.2011
+ * @see JstlView
+ */
+public class DecoratedJstlView extends DecoratedInternalResourceView {
+	private MessageSource messageSource;
 
+	/**
+	 * Constructor for use as a bean.
+	 * @see #setUrl
+	 */
 	public DecoratedJstlView() {
 	}
 
-	public String getTemplatePath() {
-		return templatePath;
+	/**
+	 * Create a new JstlView with the given URL.
+	 * @param url the URL to forward to
+	 */
+	public DecoratedJstlView(String url) {
+		super(url);
 	}
 
-	public void setTemplatePath(String templatePath) {
-		this.templatePath = templatePath;
+	/**
+	 * Create a new JstlView with the given URL.
+	 * @param url the URL to forward to
+	 * @param messageSource the MessageSource to expose to JSTL tags
+	 * (will be wrapped with a JSTL-aware MessageSource that is aware of JSTL's
+	 * <code>javax.servlet.jsp.jstl.fmt.localizationContext</code> context-param)
+	 * @see JstlUtils#getJstlAwareMessageSource
+	 */
+	public DecoratedJstlView(String url, MessageSource messageSource) {
+		this(url);
+		this.messageSource = messageSource;
 	}
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getLayoutParam() {
-		return layoutParam;
-	}
-
-	public void setLayoutParam(String layoutParam) {
-		this.layoutParam = layoutParam;
-	}
-
-	public String getLayoutParamValue() {
-		return layoutParamValue;
-	}
-
-	public void setLayoutParamValue(String layoutParamValue) {
-		this.layoutParamValue = layoutParamValue;
-	}
-
+	/**
+	 * Wraps the MessageSource with a JSTL-aware MessageSource that is aware
+	 * of JSTL's <code>javax.servlet.jsp.jstl.fmt.localizationContext</code>
+	 * context-param.
+	 * @see JstlUtils#getJstlAwareMessageSource
+	 */
 	@Override
-	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		if (useTemplate(request)) {
-			model.put("main", getUrl());
-			model.put("title", title);
-			System.out.println(this + "render: page:" + getUrl() + " template:" + templatePath);
+	protected void initServletContext(ServletContext servletContext) {
+		if (this.messageSource != null) {
+			this.messageSource = JstlUtils.getJstlAwareMessageSource(servletContext, this.messageSource);
 		}
-		super.renderMergedOutputModel(model, request, response);
+		super.initServletContext(servletContext);
 	}
 
+	/**
+	 * Exposes a JSTL LocalizationContext for Spring's locale and MessageSource.
+	 * @see JstlUtils#exposeLocalizationContext
+	 */
 	@Override
-	protected String prepareForRendering(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if (useTemplate(request)) {
-			return templatePath;
+	protected void exposeHelpers(HttpServletRequest request) throws Exception {
+		if (this.messageSource != null) {
+			JstlUtils.exposeLocalizationContext(request, this.messageSource);
 		}
 		else {
-			return super.prepareForRendering(request, response);
+			JstlUtils.exposeLocalizationContext(new RequestContext(request, getServletContext()));
 		}
 	}
 
-	protected boolean useTemplate(HttpServletRequest request) {
-		System.out.println(this + ".useTemplate:" + layoutParam + "=" + layoutParamValue + " =?"
-				+ request.getParameter(layoutParam));
-		return layoutParamValue == null || !layoutParamValue.equals(request.getParameter(layoutParam));
-	}
 }
